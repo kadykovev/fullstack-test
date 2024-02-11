@@ -7,10 +7,23 @@ use CodeIgniter\Model;
 class CommentModel extends Model
 {
     protected $table = 'comments';
-    protected $allowedFields = ['name', 'text', 'date'];
+    protected $allowedFields = ['name_id', 'text', 'date'];
 
     protected $validationRules = [
-        'name' => "required|valid_email|max_length[100]",
         'text' => "required",
     ];
+
+    public function getPagination(int $perPage = null, int $currentPage, string $orderBy, string $sortingOrder): array
+    {
+        $this->builder()
+            ->select('names.id AS id, names.name, comments.text, comments.date AS date')
+            ->join('names', 'names.id = comments.name_id')
+            ->orderBy($orderBy, $sortingOrder);
+
+        return [
+            'commentsList'  => $this->paginate($perPage, 'commentsGroup', $currentPage),
+            'currentPage' => $this->pager->getCurrentPage('commentsGroup'),
+            'pageCount' => $this->pager->getPageCount('commentsGroup'),
+        ];
+    }
 }

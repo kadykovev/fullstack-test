@@ -15,9 +15,10 @@ class Comments extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'name' => [
-                'type'       => 'VARCHAR',
-                'constraint' => '100',
+            'name_id' => [
+                'type'           => 'INT',
+                'constraint'     => 5,
+                'unsigned'       => true,
             ],
             'text' => [
                 'type' => 'TEXT',
@@ -28,6 +29,7 @@ class Comments extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('name_id', 'names', 'id');
         $this->forge->createTable('comments');
     }
 
