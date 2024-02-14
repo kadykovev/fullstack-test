@@ -13,13 +13,18 @@ class CommentModel extends Model
         'text' => "required",
     ];
 
-    public function getPagination(int $perPage = null, int $currentPage, string $orderBy, string $sortingOrder): array
+    protected $validationMessages = [
+        'text' => [
+            'required' => 'Поле не может быть пустым!',
+        ],
+    ];
+
+    public function getPagination(int $perPage, int $currentPage, string $orderBy, string $sortingOrder): array
     {
         $this->builder()
-            ->select('names.id AS id, names.name, comments.text, comments.date AS date')
+            ->select('names.id AS id, names.name, comments.id AS comment_id, comments.text, comments.date AS date')
             ->join('names', 'names.id = comments.name_id')
             ->orderBy($orderBy, $sortingOrder);
-
         return [
             'commentsList'  => $this->paginate($perPage, 'commentsGroup', $currentPage),
             'currentPage' => $this->pager->getCurrentPage('commentsGroup'),

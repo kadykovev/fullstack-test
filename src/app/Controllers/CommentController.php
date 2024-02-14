@@ -36,7 +36,7 @@ class CommentController extends BaseController
         $nameModel = new NameModel();
 
         $receivedName = trim($this->request->getPost('name'));
-        $receivedComment = trim($this->request->getPost('comment'));
+        $receivedComment = htmlspecialchars(trim($this->request->getPost('comment')));
 
         $isValidName = $nameModel->validate(['name' => $receivedName]);
         $isValidComment = $commentModel->validate(['text' => $receivedComment]);
@@ -73,5 +73,15 @@ class CommentController extends BaseController
             header("Content-type: application/json; charset=utf-8");
             echo json_encode($respose);
         }
+    }
+
+    public function ajaxDelete()
+    {
+        $commentModel = new CommentModel();
+        $commentId = $this->request->getPost('commentId');
+        $commentModel->builder()->where('id', $commentId)->delete();
+
+        header("Content-type: application/json; charset=utf-8");
+        echo json_encode(['status' => 'success']);
     }
 }

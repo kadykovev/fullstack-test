@@ -36,6 +36,7 @@ $routes->get('/', 'HomeController::index');
 $routes->get('/comments', 'CommentController::index');
 $routes->get('/ajax/comments', 'CommentController::ajaxIndex');
 $routes->post('/ajax/comments', 'CommentController::ajaxStore');
+$routes->post('/ajax/comments/delete', 'CommentController::ajaxDelete');
 
 
 /*
